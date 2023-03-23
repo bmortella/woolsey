@@ -11,36 +11,30 @@ import pytesseract
 import faiss
 import pickle
 
-# TODO: Maybe split the text while processing the pages so we can hold the page number in the metadata
-def read_pdf(pdf) -> str:
-    '''Read a PDF file using OCR.'''
+
+data = list()
+sources = list()
+docs = list(Path("./docs").glob("*.pdf"))
+
+# Iterate over all PDFs in the docs folder.
+for pdf in tqdm(docs):
+    # Convert the PDF to images.
     pages = convert_from_path(pdf)
-    text = ""
-    for page in pages:
-        text += pytesseract.image_to_string(page)
-    return text
-    
-
-ps = list(Path("./docs").glob("*.pdf"))
-data = []
-sources = []
-for p in tqdm(ps):
-    data.append(read_pdf(p))
-    sources.append(p)
-
-# Split the documents, as needed, into smaller chunks.
-# We do this due to the context limits of the LLMs.
-text_splitter = CharacterTextSplitter(chunk_size=1500, separator="\n")
-docs = []
-metadatas = []
-for i, d in enumerate(data):
-    splits = text_splitter.split_text(d)
-    docs.extend(splits)
-    metadatas.extend([{"source": sources[i]}] * len(splits))
-
+    with open(f"./out/{pdf.stem}.txt", "w", encoding="UTF-8") as f:
+        for i, page in enumerate(pages):
+            # Read the text from the page using OCR.
+            text = pytesseract.image_to_string(page)
+            f.write(text)
+            
+            # Split text into smaller chunks. Needed due to the context limits of the LLMs.
+            text_splitter = CharacterTextSplitter(chunk_size=800, separator="\n")
+            splits = text_splitter.split_text(text)
+            
+            data.extend(splits)
+            sources.extend([{"source": f"{pdf.stem} (p.{i+1})"}] * len(splits))
 
 # Create a vector store from the documents and save it to disk.
-store = FAISS.from_texts(docs, HuggingFaceEmbeddings(), metadatas=metadatas)
+store = FAISS.from_texts(data, HuggingFaceEmbeddings(), metadatas=sources)
 faiss.write_index(store.index, "docs.index")
 store.index = None
 with open("faiss_store.pkl", "wb") as f:
