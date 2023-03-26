@@ -27,7 +27,7 @@ for pdf in tqdm(docs):
             f.write(text)
             
             # Split text into smaller chunks. Needed due to the context limits of the LLMs.
-            text_splitter = CharacterTextSplitter(chunk_size=800, separator="\n")
+            text_splitter = CharacterTextSplitter(chunk_size=1000, separator="\n")
             splits = text_splitter.split_text(text)
             
             data.extend(splits)
