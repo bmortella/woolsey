@@ -15,4 +15,4 @@ First install the requirements with `pip install -r requeriments.txt`. Also set 
 ## Notes
 
 - To minimize expenses, this code employs an embedding model from HuggingFace defined in the langchain code instead of OpenAI's ada embedding. Although this particular model is only compatible with English, the model available at [this link](https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2) should support multiple languages.
-- I also decreased the chunk size to 1000 from 1500 in the original repo as it made sence for my use case.
+- I also decreased the chunk size to 1000 from 1500 in the original repo as it made sense for my use case.
