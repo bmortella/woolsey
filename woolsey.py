@@ -1,4 +1,4 @@
-"""Ask a question to the notion database."""
+"""Ask a question to the PDFs."""
 import faiss
 from langchain.llms import OpenAI
 from langchain.chains import VectorDBQAWithSourcesChain
