@@ -6,11 +6,11 @@ Code adapted from https://github.com/hwchase17/notion-qa
 
 ## Usage
 
-First install the requirements with `pip install -r requeriments.txt`. Also set your `OPENAI_API_KEY` environment variable or add `openai_api_key='your API key here'` to the code just after `temperature=0`.
+First install the requirements with `pip install -r requeriments.txt`. Also set your `OPENAI_API_KEY` environment variable or add `openai_api_key='your API key here'` to the code just after `temperature=0` in `woolsey.py`.
 
 1. Place your PDFs in the docs folder.
 2. Run `python ingest_data.py`.
-3. Run `python wolsey.py "Your question here"`
+3. Run `python woolsey.py "Your question here"`
 
 ## Notes
 
